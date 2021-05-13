@@ -35,6 +35,7 @@ public class BoardList {
     public static void getBoardList(Member member, TextChannel textChannel, String prefix) throws IOException {
         final String langCode = Localizations.getGuildLanguage(member.getGuild());
         final String embedTitle = Localizations.getString("board_title", langCode);
+<<<<<<< Updated upstream
         final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/list/" + member.getGuild().getId())
                 .method(org.jsoup.Connection.Method.GET)
                 .header("authorization", "TMB " + Main.authorizationToken)
@@ -44,6 +45,9 @@ public class BoardList {
                 .ignoreContentType(true)
                 .ignoreHttpErrors(true)
                 .execute();
+=======
+        final org.jsoup.Connection.Response res = Main.tmbAPI("board/list/" + member.getGuild().getId(), member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
+>>>>>>> Stashed changes
         final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
         final int statusCode = res.statusCode();
         if (statusCode == 200) {

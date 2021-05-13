@@ -44,6 +44,7 @@ public class DeleteTask {
                     }), textChannel, Color.red, langCode);
                 }
             } else {
+<<<<<<< Updated upstream
                 final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/server/done-tasks/" + member.getGuild().getId())
                         .method(org.jsoup.Connection.Method.DELETE)
                         .header("authorization", "TMB " + Main.authorizationToken)
@@ -52,6 +53,9 @@ public class DeleteTask {
                         .ignoreContentType(true)
                         .ignoreHttpErrors(true)
                         .execute();
+=======
+                final org.jsoup.Connection.Response res = Main.tmbAPI("server/done-tasks/" + member.getGuild().getId(), member.getId(), org.jsoup.Connection.Method.DELETE, member.getGuild().getId()).execute();
+>>>>>>> Stashed changes
                 if (res.statusCode() == 200) {
                     MessageSender.send(embedTitle, Localizations.getString("deleted_done_tasks", langCode), textChannel, Color.green, langCode);
                 }

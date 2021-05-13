@@ -23,12 +23,19 @@ import de.bnder.taskmanager.commands.permission.PermissionController;
 import de.bnder.taskmanager.commands.settings.SettingsController;
 import de.bnder.taskmanager.commands.task.TaskController;
 import de.bnder.taskmanager.listeners.*;
+import de.bnder.taskmanager.listeners.roles.MemberRoleAdd;
+import de.bnder.taskmanager.listeners.roles.RoleCreate;
+import de.bnder.taskmanager.listeners.roles.RoleDelete;
+import de.bnder.taskmanager.listeners.roles.RoleUpdatePermissions;
 import de.bnder.taskmanager.listeners.typoReactionListeners.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
@@ -36,13 +43,43 @@ import java.util.Arrays;
 
 public class Main {
 
-    public static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
+<<<<<<< Updated upstream
     public static final String requestURL = dotenv.get("REQUEST_URL") != null ? dotenv.get("REQUEST_URL") : System.getenv("REQUEST_URL");
     public static final String authorizationToken = dotenv.get("AUTHORIZATION_TOKEN") != null ? dotenv.get("AUTHORIZATION_TOKEN") : System.getenv("AUTHORIZATION_TOKEN");
     public static final String userAgent = "TaskmanagerBot/1.0 (Windows; U; WindowsNT 5.1; de-DE; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6";
     public static final int shard = Integer.parseInt(dotenv.get("SHARD") != null ? dotenv.get("SHARD") : System.getenv("SHARD"));
     public static final int totalShard = Integer.parseInt(dotenv.get("TOTAL_SHARDS") != null ? dotenv.get("TOTAL_SHARDS") : System.getenv(("TOTAL_SHARDS")));
+=======
+    private static final String tmbApiUrl = dotenv.get("REQUEST_URL") != null ? dotenv.get("REQUEST_URL") : System.getenv("REQUEST_URL");
+    private static final String tmbApiAuthorizationToken = dotenv.get("AUTHORIZATION_TOKEN") != null ? dotenv.get("AUTHORIZATION_TOKEN") : System.getenv("AUTHORIZATION_TOKEN");
+    private static final String userAgent = "TaskmanagerBot/1.0 (Windows; U; WindowsNT 5.1; de-DE; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6";
+    private static final int totalShards = Integer.parseInt(dotenv.get("TOTAL_SHARDS") != null ? dotenv.get("TOTAL_SHARDS") : System.getenv(("TOTAL_SHARDS")));
+    public static final int shard = Integer.parseInt(dotenv.get("SHARD") != null ? dotenv.get("SHARD") : System.getenv("SHARD"));
+
+    static ShardManager jda;
+
+    public static Connection tmbAPI(String path, String userID, Connection.Method method, String guildId) {
+        if (guildId != null && userID != null) {
+            final Guild guild = jda.getGuildById(guildId);
+            if (guild != null) {
+                final Member member = guild.retrieveMemberById(userID).complete();
+                //TODO: Send request to update user data
+            }
+        }
+
+        return Jsoup.connect(tmbApiUrl + "/" + path).method(method)
+                .header("authorization", "TMB " + Main.tmbApiAuthorizationToken)
+                .header("user_id", userID == null ? "---" : userID)
+                .timeout(de.bnder.taskmanager.utils.Connection.timeout)
+                .userAgent(Main.userAgent)
+                .ignoreContentType(true)
+                .ignoreHttpErrors(true)
+                .postDataCharset("UTF-8")
+                .followRedirects(true);
+    }
+>>>>>>> Stashed changes
 
     public static final String prefix = "-";
 
@@ -69,6 +106,11 @@ public class Main {
         builder.addEventListeners(new SettingsTypoReactionListener());
         builder.addEventListeners(new BoardTypoReactionListener());
         builder.addEventListeners(new TaskLogReaction());
+        builder.addEventListeners(new GuildUpdateOwner());
+        builder.addEventListeners(new RoleCreate());
+        builder.addEventListeners(new RoleDelete());
+        builder.addEventListeners(new MemberRoleAdd());
+        builder.addEventListeners(new RoleUpdatePermissions());
 
         CommandHandler.commands.put("version", new Version());
         CommandHandler.commands.put("prefix", new Prefix());
@@ -98,7 +140,7 @@ public class Main {
         builder.setActivity(Activity.playing("bnder.net"));
 
         try {
-            builder.build();
+            jda = builder.build();
         } catch (LoginException e) {
             e.printStackTrace();
         }

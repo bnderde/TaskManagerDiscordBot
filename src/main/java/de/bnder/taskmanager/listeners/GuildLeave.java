@@ -15,7 +15,7 @@ package de.bnder.taskmanager.listeners;
  * limitations under the License.
  */
 
-import de.bnder.taskmanager.lists.UpdateLists;
+import de.bnder.taskmanager.botlists.UpdateLists;
 import de.bnder.taskmanager.main.Main;
 import de.bnder.taskmanager.utils.Connection;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -26,7 +26,11 @@ public class GuildLeave extends ListenerAdapter {
 
     public void onGuildLeave(GuildLeaveEvent event) {
         try {
+<<<<<<< Updated upstream
             Jsoup.connect(Main.requestURL + "/server/delete/" + event.getGuild().getId()).method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).header("user_id", "---").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+            Main.tmbAPI("server/delete/" + event.getGuild().getId(), null, org.jsoup.Connection.Method.POST, null).execute();
+>>>>>>> Stashed changes
         } catch (Exception e) {
             e.printStackTrace();
         }

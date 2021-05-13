@@ -21,7 +21,11 @@ public class DeleteGroup {
         final String embedTitle = Localizations.getString("group_title", langCode);
         if (PermissionSystem.hasPermission(member, GroupPermission.DELETE_GROUP)) {
             final String groupName = Connection.encodeString(args[1]);
+<<<<<<< Updated upstream
             final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/group/" + member.getGuild().getId() + "/" + groupName).method(org.jsoup.Connection.Method.DELETE).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+            final org.jsoup.Connection.Response res = Main.tmbAPI("group/" + member.getGuild().getId() + "/" + groupName, member.getId(), org.jsoup.Connection.Method.DELETE, member.getGuild().getId()).execute();
+>>>>>>> Stashed changes
             final int statusCode = res.statusCode();
             if (statusCode == 200) {
                 MessageSender.send(embedTitle, Localizations.getString("group_was_deleted", langCode, new ArrayList<String>() {

@@ -15,7 +15,7 @@ package de.bnder.taskmanager.listeners;
  * limitations under the License.
  */
 
-import de.bnder.taskmanager.lists.UpdateLists;
+import de.bnder.taskmanager.botlists.UpdateLists;
 import de.bnder.taskmanager.utils.MessageSender;
 import de.bnder.taskmanager.utils.UpdateServerName;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -35,8 +35,7 @@ public class GuildJoin extends ListenerAdapter {
             ex.printStackTrace();
         }
         final String intro = "Thanks for using this bot. The default language is english but you can change the language with the command `-language`.";
-        final String msg = "By using this bot, you agree to our Terms of Use (https://bnder.net/termsofuse), Privacy Policy (https://bnder.net/privacy) & Community Guidelines (https://bnder.net/guidelines). " +
-                "\nType `-help` for a complete list of all commands.";
+        final String msg = "Type `-help` for a complete list of all commands.";
         try {
             MessageSender.send("Hello!", intro + "\n" + msg, e.getGuild().getDefaultChannel(), Color.green, "en", false);
         } catch (InsufficientPermissionException | NullPointerException ex) {

@@ -44,7 +44,11 @@ public class Search implements Command {
             final String searchTerm = searchTermBuilder.substring(0, searchTermBuilder.length() - 1);
             final String searchTermRaw = searchTermBuilderRaw.substring(0, searchTermBuilderRaw.length() - 1);
             if (searchTermRaw.length() >= 3) {
+<<<<<<< Updated upstream
                 final Connection.Response res = Jsoup.connect(Main.requestURL + "/global/search/" + event.getGuild().getId()).method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).data("search_term", searchTerm).postDataCharset("UTF-8").header("user_id", event.getMember().getId()).timeout(de.bnder.taskmanager.utils.Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+                final Connection.Response res = Main.tmbAPI("global/search/" + event.getGuild().getId(), event.getAuthor().getId(), Connection.Method.POST, event.getGuild().getId()).data("search_term", searchTerm).execute();
+>>>>>>> Stashed changes
                 final JsonObject jsonObject = Json.parse(res.body()).asObject();
                 final JsonArray tasksResultArray = jsonObject.get("task_results").asArray();
                 final JsonArray groupsResultArray = jsonObject.get("group_results").asArray();
@@ -93,7 +97,11 @@ public class Search implements Command {
                             final String groupID = value.asString();
                             final EmbedBuilder builder = new EmbedBuilder().setColor(Color.cyan);
 
+<<<<<<< Updated upstream
                             final Connection.Response groupInfoRes = Jsoup.connect(Main.requestURL + "/group/info/" + event.getGuild().getId() + "/" + groupID).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", event.getMember().getId()).timeout(de.bnder.taskmanager.utils.Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+                            final Connection.Response groupInfoRes = Main.tmbAPI("group/info/" + event.getGuild().getId() + "/" + groupID, event.getMember().getId(), Connection.Method.GET, event.getGuild().getId()).execute();
+>>>>>>> Stashed changes
                             final JsonObject groupInfoJsonObject = Json.parse(groupInfoRes.body()).asObject();
                             final String groupName = groupInfoJsonObject.getString("name", null);
 

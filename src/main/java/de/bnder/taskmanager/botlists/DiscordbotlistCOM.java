@@ -1,4 +1,4 @@
-package de.bnder.taskmanager.lists;
+package de.bnder.taskmanager.botlists;
 
 import de.bnder.taskmanager.main.Main;
 import org.jsoup.Connection;
@@ -6,16 +6,16 @@ import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
-public class BlistXYZ {
+public class DiscordbotlistCOM {
 
-    private static final String baseURL = "https://blist.xyz/api/v2";
-    private static final String apiKey = Main.dotenv.get("BLIST.XYZ_API_KEY") != null ? Main.dotenv.get("BLIST.XYZ_API_KEY") : System.getenv("BLIST.XYZ_API_KEY");
+    private static final String baseURL = "https://discordbotlist.com/api/v1";
+    private static final String apiKey = Main.dotenv.get("DISCORDBOTLIST.COM_API_KEY") != null ? Main.dotenv.get("DISCORDBOTLIST.COM_API_KEY") : System.getenv("DISCORDBOTLIST.COM_API_KEY");
 
     public static void sendServerCount(int serverCount, String botID) throws IOException {
         System.out.println("Updating Servers on " + baseURL);
-        final Connection.Response response = Jsoup.connect(baseURL + "/bot/"+ botID + "/stats")
+        final Connection.Response response = Jsoup.connect(baseURL + "/bots/"+ botID + "/stats")
                 .header("Authorization", apiKey)
-                .data("server_count", String.valueOf(serverCount))
+                .data("guilds", String.valueOf(serverCount))
                 .method(Connection.Method.POST)
                 .ignoreContentType(true)
                 .ignoreHttpErrors(true)

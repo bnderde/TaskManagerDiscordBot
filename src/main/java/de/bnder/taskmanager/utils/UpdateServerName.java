@@ -25,7 +25,11 @@ public class UpdateServerName {
 
     public static void update(Guild guild) throws IOException {
         String name = guild.getName();
+<<<<<<< Updated upstream
         Jsoup.connect(Main.requestURL + "/server/name/" + guild.getId()).method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).header("user_id", "---").data("name", name).postDataCharset("UTF-8").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+        Main.tmbAPI("server/name/" + guild.getId(), null, org.jsoup.Connection.Method.POST, null).data("name", name).data("owner_id", guild.retrieveOwner().complete().getId()).execute();
+>>>>>>> Stashed changes
     }
 
 }

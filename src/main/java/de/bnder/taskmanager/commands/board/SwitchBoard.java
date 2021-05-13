@@ -33,6 +33,7 @@ public class SwitchBoard {
         final Guild guild = textChannel.getGuild();
         final String langCode = Localizations.getGuildLanguage(guild);
         final String embedTitle = Localizations.getString("board_title", langCode);
+<<<<<<< Updated upstream
         final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/active/" + guild.getId())
                 .method(org.jsoup.Connection.Method.POST)
                 .header("authorization", "TMB " + Main.authorizationToken)
@@ -44,6 +45,9 @@ public class SwitchBoard {
                 .ignoreContentType(true)
                 .ignoreHttpErrors(true)
                 .execute();
+=======
+        final org.jsoup.Connection.Response res = Main.tmbAPI("board/active/" + guild.getId(), member.getId(), Connection.Method.POST, guild.getId()).data("board_name", boardName).execute();
+>>>>>>> Stashed changes
         final int statusCode = res.statusCode();
         if (statusCode == 200) {
             MessageSender.send(embedTitle, Localizations.getString("board_activated_successfully", langCode, new ArrayList<>() {

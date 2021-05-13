@@ -24,7 +24,11 @@ public class GroupMembers {
         final String embedTitle = Localizations.getString("group_title", langCode);
         if (PermissionSystem.hasPermission(member, GroupPermission.SHOW_MEMBERS)) {
             final String groupName = Connection.encodeString(args[1]);
+<<<<<<< Updated upstream
             final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/group/members/" + member.getGuild().getId() + "/" + groupName).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+            final org.jsoup.Connection.Response res = Main.tmbAPI("group/members/" + member.getGuild().getId() + "/" + groupName, member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
+>>>>>>> Stashed changes
             final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
             final int statusCode = res.statusCode();
             if (statusCode == 200) {

@@ -1,4 +1,4 @@
-package de.bnder.taskmanager.lists;
+package de.bnder.taskmanager.botlists;
 /*
  * Copyright (C) 2021 Jan Brinkmann
  *
@@ -21,16 +21,16 @@ import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
-public class SpacebotlistORG{
+public class BotlistsCOM {
 
-    private static final String baseURL = "https://space-bot-list.xyz/api";
-    private static final String apiKey = Main.dotenv.get("SPACE-BOT-LIST.ORG_API_KEY") != null ? Main.dotenv.get("SPACE-BOT-LIST.ORG_API_KEY") : System.getenv("SPACE-BOT-LIST.ORG_API_KEY");
+    private static final String baseURL = "https://botlists.com/api/bot";
+    private static final String apiKey = Main.dotenv.get("BOTLISTS.COM_API_KEY") != null ? Main.dotenv.get("BOTLISTS.COM_API_KEY") : System.getenv("BOTLISTS.COM_API_KEY");
 
-    public static void sendServerCount(int serverCount, String botID) throws IOException {
+    public static void sendServerCount(int serverCount) throws IOException {
         System.out.println("Updating Servers on " + baseURL);
-        final Connection.Response response = Jsoup.connect(baseURL + "/bots/" + botID)
-                .header("Authentication", apiKey)
-                .data("guilds", String.valueOf(serverCount))
+        final Connection.Response response = Jsoup.connect(baseURL)
+                .header("token", apiKey)
+                .data("guild_count", String.valueOf(serverCount))
                 .method(Connection.Method.POST)
                 .ignoreContentType(true)
                 .ignoreHttpErrors(true)

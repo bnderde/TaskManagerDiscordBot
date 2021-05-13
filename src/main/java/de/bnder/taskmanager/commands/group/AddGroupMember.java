@@ -25,7 +25,11 @@ public class AddGroupMember {
                 if (mentionedMembers != null && mentionedMembers.size() > 0) {
                     final String groupName = Connection.encodeString(args[1 + mentionedMembers.size()]);
                     for (Member mentionedMember : mentionedMembers) {
+<<<<<<< Updated upstream
                         final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/group/add-member/" + member.getGuild().getId()).method(org.jsoup.Connection.Method.PUT).header("authorization", "TMB " + Main.authorizationToken).header("user_id", mentionedMember.getId()).data("group_name", groupName).postDataCharset("UTF-8").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+                        final org.jsoup.Connection.Response res = Main.tmbAPI("group/add-member/" + member.getGuild().getId(), mentionedMember.getId(), org.jsoup.Connection.Method.PUT, member.getGuild().getId()).data("group_name", groupName).execute();
+>>>>>>> Stashed changes
                         final int statusCode = res.statusCode();
                         if (statusCode == 200) {
                             MessageSender.send(embedTitle, Localizations.getString("user_added_to_group", langCode, new ArrayList<String>() {

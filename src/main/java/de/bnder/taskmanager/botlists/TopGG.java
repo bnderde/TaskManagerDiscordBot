@@ -1,4 +1,4 @@
-package de.bnder.taskmanager.lists;
+package de.bnder.taskmanager.botlists;
 
 import de.bnder.taskmanager.main.Main;
 import org.jsoup.Connection;

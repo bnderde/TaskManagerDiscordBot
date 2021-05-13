@@ -36,6 +36,7 @@ public class CreateBoard {
         final String langCode = Localizations.getGuildLanguage(guild);
         final String embedTitle = Localizations.getString("board_title", langCode);
         if (PermissionSystem.hasPermission(member, BoardPermission.CREATE_BOARD)) {
+<<<<<<< Updated upstream
             final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/create/" + member.getGuild().getId())
                     .method(org.jsoup.Connection.Method.POST)
                     .header("authorization", "TMB " + Main.authorizationToken)
@@ -46,6 +47,9 @@ public class CreateBoard {
                     .ignoreContentType(true)
                     .ignoreHttpErrors(true)
                     .execute();
+=======
+            final org.jsoup.Connection.Response res = Main.tmbAPI("board/create/" + member.getGuild().getId(), member.getId(), Connection.Method.POST, member.getGuild().getId()).data("board_name", boardName).execute();
+>>>>>>> Stashed changes
             final int statusCode = res.statusCode();
             if (statusCode == 200) {
                 MessageSender.send(embedTitle, Localizations.getString("board_created_successfully", langCode, new ArrayList<String>() {

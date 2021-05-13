@@ -35,6 +35,7 @@ public class DeleteBoard {
         final String langCode = Localizations.getGuildLanguage(member.getGuild());
         final String embedTitle = Localizations.getString("board_title", langCode);
         if (PermissionSystem.hasPermission(member, BoardPermission.DELETE_BOARD)) {
+<<<<<<< Updated upstream
             final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/" + member.getGuild().getId() + "/" + boardName)
                     .method(org.jsoup.Connection.Method.DELETE)
                     .header("authorization", "TMB " + Main.authorizationToken)
@@ -44,6 +45,9 @@ public class DeleteBoard {
                     .ignoreContentType(true)
                     .ignoreHttpErrors(true)
                     .execute();
+=======
+            final org.jsoup.Connection.Response res = Main.tmbAPI("board/" + member.getGuild().getId() + "/" + boardName, member.getId(), org.jsoup.Connection.Method.DELETE, member.getGuild().getId()).execute();
+>>>>>>> Stashed changes
             final int statusCode = res.statusCode();
             if (statusCode == 200) {
                 MessageSender.send(embedTitle, Localizations.getString("board_was_deleted", langCode, new ArrayList<String>() {

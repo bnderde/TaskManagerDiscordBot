@@ -59,7 +59,11 @@ public class AddTask {
                 final de.bnder.taskmanager.utils.Task taskObject = new de.bnder.taskmanager.utils.Task(textChannel.getGuild(), task, null, groupName, member);
                 final int statusCode = taskObject.getStatusCode();
                 if (statusCode == 200) {
+<<<<<<< Updated upstream
                     final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/group/members/" + textChannel.getGuild().getId() + "/" + groupName).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+                    final org.jsoup.Connection.Response res = Main.tmbAPI("group/members/" + textChannel.getGuild().getId() + "/" + groupName, member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
+>>>>>>> Stashed changes
                     final int getGroupMembersStatusCode = res.statusCode();
                     if (getGroupMembersStatusCode == 200) {
                         final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();

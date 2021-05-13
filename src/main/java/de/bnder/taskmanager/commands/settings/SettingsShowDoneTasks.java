@@ -19,7 +19,11 @@ public class SettingsShowDoneTasks {
     public static void set(Member member, TextChannel textChannel) throws IOException {
         final String langCode = Localizations.getGuildLanguage(member.getGuild());
         final String embedTitle = Localizations.getString("settings_title", langCode);
+<<<<<<< Updated upstream
         final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/user/settings/" + member.getGuild().getId()).method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).data("type", "show_done_tasks").postDataCharset("UTF-8").ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+        final org.jsoup.Connection.Response res = Main.tmbAPI("user/settings/" + member.getGuild().getId(), member.getId(), org.jsoup.Connection.Method.POST, member.getGuild().getId()).data("type", "show_done_tasks").execute();
+>>>>>>> Stashed changes
         final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
         if (res.statusCode() == 200) {
             final boolean newValue = Boolean.parseBoolean(jsonObject.getString("newValue", "0"));

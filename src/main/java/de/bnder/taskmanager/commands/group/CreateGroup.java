@@ -21,7 +21,11 @@ public class CreateGroup {
         final String embedTitle = Localizations.getString("group_title", langCode);
         if (PermissionSystem.hasPermission(member, GroupPermission.CREATE_GROUP)) {
             final String groupName = Connection.encodeString(args[1]);
+<<<<<<< Updated upstream
             final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/group/create/" + member.getGuild().getId()).method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).data("group_name", groupName).postDataCharset("UTF-8").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+            final org.jsoup.Connection.Response res = Main.tmbAPI("group/create/" + member.getGuild().getId(), member.getId(), org.jsoup.Connection.Method.POST, member.getGuild().getId()).data("group_name", groupName).execute();
+>>>>>>> Stashed changes
             final int statusCode = res.statusCode();
             if (statusCode == 200) {
                 MessageSender.send(embedTitle, Localizations.getString("group_created_successfully", langCode, new ArrayList<String>() {

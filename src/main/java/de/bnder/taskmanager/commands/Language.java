@@ -37,7 +37,11 @@ public class Language implements Command {
             final String language = args[0].toLowerCase();
             if (validLangCodes.contains(language)) {
                 if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+<<<<<<< Updated upstream
                     final Connection.Response res = Jsoup.connect(Main.requestURL + "/server/language/" + event.getGuild().getId()).method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).data("language", language).postDataCharset("UTF-8").header("user_id", event.getMember().getId()).timeout(de.bnder.taskmanager.utils.Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+                    final Connection.Response res = Main.tmbAPI("server/language/" + event.getGuild().getId(), event.getAuthor().getId(), Connection.Method.POST, event.getGuild().getId()).data("language", language).execute();
+>>>>>>> Stashed changes
                     final String embedTitle = Localizations.getString("language_message_title", language);
                     if (res.statusCode() == 200) {
                         MessageSender.send(embedTitle, Localizations.getString("sprache_geaendert", language), event.getMessage(), Color.green, language);

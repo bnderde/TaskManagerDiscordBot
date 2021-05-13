@@ -25,7 +25,11 @@ public class SettingsSetNotifications {
             if (mentionedMembers != null && mentionedMembers.size() > 0) {
                 if (mentionedChannels != null && mentionedChannels.size() > 0) {
                     final User user = mentionedMembers.get(0).getUser();
+<<<<<<< Updated upstream
                     final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/user/notify-channel/" + member.getGuild().getId()).method(org.jsoup.Connection.Method.PUT).header("authorization", "TMB " + Main.authorizationToken).header("user_id", user.getId()).data("notify_channel", mentionedChannels.get(0).getId()).postDataCharset("UTF-8").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
+=======
+                    final org.jsoup.Connection.Response res = Main.tmbAPI("user/notify-channel/" + member.getGuild().getId(), user.getId(), org.jsoup.Connection.Method.PUT, member.getGuild().getId()).data("notify_channel", mentionedChannels.get(0).getId()).execute();
+>>>>>>> Stashed changes
                     if (res.statusCode() == 200) {
                         MessageSender.send(embedTitle, Localizations.getString("user_connect_channel_connected", langCode, new ArrayList<String>() {{
                             add(user.getAsTag());
