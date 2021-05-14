@@ -27,14 +27,4 @@ public class LevenshteinDistance {
         return cost[len0 - 1];
     }
 
-    public static boolean tooSimilar(CharSequence ch1, CharSequence ch2, double percent) {
-        final int distance = levenshteinDistance(ch1, ch2);
-        final int max = ch1.length();
-        final double allowedPerc = (max * (percent / 100));
-        if (distance < allowedPerc) {
-            return true;
-        }
-        return false;
-    }
-
 }
