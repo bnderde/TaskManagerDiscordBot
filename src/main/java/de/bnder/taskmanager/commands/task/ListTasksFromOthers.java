@@ -10,7 +10,6 @@ import de.bnder.taskmanager.utils.MessageSender;
 import de.bnder.taskmanager.utils.Settings;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.IOException;
@@ -27,20 +26,12 @@ public class ListTasksFromOthers {
         String text;
         if (mentionedMembers != null && mentionedMembers.size() > 0) {
             final Member mentionedMember = mentionedMembers.get(0);
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/task/user/tasks/" + member.getGuild().getId() + "/" + mentionedMember.getId()).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("task/user/tasks/" + member.getGuild().getId() + "/" + mentionedMember.getId(), member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
->>>>>>> Stashed changes
             statusCode = res.statusCode();
             jsonResponse = res.parse().body().text();
         } else {
             final String groupName = args[1];
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/task/group/tasks/" + member.getGuild().getId() + "/" + Connection.encodeString(groupName)).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("task/group/tasks/" + member.getGuild().getId() + "/" + Connection.encodeString(groupName), member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
->>>>>>> Stashed changes
             statusCode = res.statusCode();
             jsonResponse = res.parse().body().text();
         }

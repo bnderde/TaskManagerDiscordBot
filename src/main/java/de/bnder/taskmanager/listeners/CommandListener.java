@@ -17,14 +17,14 @@ package de.bnder.taskmanager.listeners;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
+import de.bnder.taskmanager.listeners.roles.MemberRoleAdd;
 import de.bnder.taskmanager.main.CommandHandler;
 import de.bnder.taskmanager.main.Main;
-import de.bnder.taskmanager.utils.Connection;
 import de.bnder.taskmanager.utils.Localizations;
 import de.bnder.taskmanager.utils.MessageSender;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 
@@ -35,16 +35,16 @@ public class CommandListener extends ListenerAdapter {
             if (event.getMessage().getContentRaw().length() > 0) {
                 if (CommandHandler.commands.containsKey(event.getMessage().getContentRaw().split(" ")[0].substring(1))) {
                     try {
-<<<<<<< Updated upstream
-                        final org.jsoup.Connection.Response getPrefixRes = Jsoup.connect(Main.requestURL + "/server/prefix/" + event.getGuild().getId()).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", event.getMember().getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
                         final org.jsoup.Connection.Response getPrefixRes = Main.tmbAPI("server/prefix/" + event.getGuild().getId(), event.getAuthor().getId(), org.jsoup.Connection.Method.GET, event.getGuild().getId()).execute();
->>>>>>> Stashed changes
                         if (getPrefixRes.statusCode() == 200) {
                             final JsonObject jsonObject = Json.parse(getPrefixRes.parse().body().text()).asObject();
                             final String prefix = jsonObject.getString("prefix", Main.prefix);
                             if (event.getMessage().getContentRaw().startsWith(prefix)) {
                                 processCommand(event);
+
+                                for (Member mentionedMember : event.getMessage().getMentionedMembers()) {
+                                    MemberRoleAdd.updateUserRoles(mentionedMember);
+                                }
                             }
                         } else if (event.getMessage().getContentRaw().startsWith(Main.prefix)) {
                             processCommand(event);

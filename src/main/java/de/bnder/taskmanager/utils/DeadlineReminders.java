@@ -22,7 +22,6 @@ import de.bnder.taskmanager.main.Main;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -35,11 +34,7 @@ public class DeadlineReminders {
             @Override
             public void run() {
                 try {
-<<<<<<< Updated upstream
-                    final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/global/deadline-reminders").method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", "---").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
                     final org.jsoup.Connection.Response res = Main.tmbAPI("global/deadline-reminders", null, org.jsoup.Connection.Method.GET, null).execute();
->>>>>>> Stashed changes
                     if (res.statusCode() == 200) {
                         final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
                         for (final JsonValue value : jsonObject.get("list").asArray()) {

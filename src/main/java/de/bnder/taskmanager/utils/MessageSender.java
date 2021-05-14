@@ -19,7 +19,6 @@ import de.bnder.taskmanager.main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.IOException;
@@ -80,11 +79,7 @@ public class MessageSender {
         if (red != Color.red && showAd) setAdFooter(builder, langCode);
         msg.getChannel().sendMessage(builder.build()).queue();
         try {
-<<<<<<< Updated upstream
-            Jsoup.connect(Main.requestURL + "/stats/messages-sent").method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).header("user_id", "---").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             Main.tmbAPI("stats/messages-sent", null, org.jsoup.Connection.Method.POST, null).execute();
->>>>>>> Stashed changes
         } catch (Exception ignored) {}
     }
 
@@ -117,11 +112,7 @@ public class MessageSender {
         if (red != Color.red && showAd) setAdFooter(builder, langCode);
         textChannel.sendMessage(builder.build()).queue();
         try {
-<<<<<<< Updated upstream
-            Jsoup.connect(Main.requestURL + "/stats/messages-sent").method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).header("user_id", "---").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             Main.tmbAPI("stats/messages-sent", null, org.jsoup.Connection.Method.POST, null).execute();
->>>>>>> Stashed changes
         } catch (IOException e) {
             e.printStackTrace();
         }

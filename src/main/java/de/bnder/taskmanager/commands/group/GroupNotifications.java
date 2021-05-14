@@ -4,7 +4,6 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import de.bnder.taskmanager.main.Main;
-import de.bnder.taskmanager.utils.Connection;
 import de.bnder.taskmanager.utils.Localizations;
 import de.bnder.taskmanager.utils.MessageSender;
 import de.bnder.taskmanager.utils.PermissionSystem;
@@ -12,7 +11,6 @@ import de.bnder.taskmanager.utils.permissions.GroupPermission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.IOException;
@@ -28,11 +26,7 @@ public class GroupNotifications {
             if (mentionedChannels != null && mentionedChannels.size() > 0) {
                 String groupName = args[1];
                 if (serverHasGroup(groupName, textChannel.getGuild())) {
-<<<<<<< Updated upstream
-                    final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/group/notify-channel/" + textChannel.getGuild().getId()).method(org.jsoup.Connection.Method.PUT).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).data("group_name", groupName).data("notify_channel", mentionedChannels.get(0).getId()).postDataCharset("UTF-8").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
                     final org.jsoup.Connection.Response res = Main.tmbAPI("group/notify-channel/" + textChannel.getGuild().getId(), member.getId(), org.jsoup.Connection.Method.PUT, member.getGuild().getId()).data("group_name", groupName).data("notify_channel", mentionedChannels.get(0).getId()).execute();
->>>>>>> Stashed changes
                     if (res.statusCode() == 200) {
                         MessageSender.send(embedTitle, Localizations.getString("group_connect_channel_connected", langCode, new ArrayList<String>() {{
                             add(groupName);
@@ -62,11 +56,7 @@ public class GroupNotifications {
 
     public static boolean serverHasGroup(String group, Guild guild) {
         try {
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/group/list/" + guild.getId()).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", "---").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("group/list/" + guild.getId(), null, org.jsoup.Connection.Method.GET, guild.getId()).execute();
->>>>>>> Stashed changes
             final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
             final int statusCode = res.statusCode();
             if (statusCode == 200) {

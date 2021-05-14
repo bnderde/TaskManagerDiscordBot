@@ -4,7 +4,6 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import de.bnder.taskmanager.main.Command;
 import de.bnder.taskmanager.main.Main;
-import de.bnder.taskmanager.utils.Connection;
 import de.bnder.taskmanager.utils.Localizations;
 import de.bnder.taskmanager.utils.MessageSender;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -12,7 +11,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.IOException;
@@ -46,11 +44,7 @@ public class Token implements Command {
 
     private String getNewToken(User user) {
         try {
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/user/token/create").method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", user.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("user/token/create", user.getId(), org.jsoup.Connection.Method.GET, null).execute();
->>>>>>> Stashed changes
             final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
             if (res.statusCode() == 200) {
                 return jsonObject.getString("token", null);
@@ -63,11 +57,7 @@ public class Token implements Command {
 
     private String getToken(User user) {
         try {
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/user/token").method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", user.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("user/token", user.getId(), org.jsoup.Connection.Method.GET, null).execute();
->>>>>>> Stashed changes
             final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
             if (res.statusCode() == 200) {
                 return jsonObject.getString("token", null);

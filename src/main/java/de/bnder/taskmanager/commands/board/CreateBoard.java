@@ -23,7 +23,7 @@ import de.bnder.taskmanager.utils.permissions.BoardPermission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
+import org.jsoup.Connection;
 
 import java.awt.*;
 import java.io.IOException;
@@ -36,20 +36,7 @@ public class CreateBoard {
         final String langCode = Localizations.getGuildLanguage(guild);
         final String embedTitle = Localizations.getString("board_title", langCode);
         if (PermissionSystem.hasPermission(member, BoardPermission.CREATE_BOARD)) {
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/create/" + member.getGuild().getId())
-                    .method(org.jsoup.Connection.Method.POST)
-                    .header("authorization", "TMB " + Main.authorizationToken)
-                    .header("user_id", member.getId()).data("board_name", boardName)
-                    .postDataCharset("UTF-8")
-                    .timeout(de.bnder.taskmanager.utils.Connection.timeout)
-                    .userAgent(Main.userAgent)
-                    .ignoreContentType(true)
-                    .ignoreHttpErrors(true)
-                    .execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("board/create/" + member.getGuild().getId(), member.getId(), Connection.Method.POST, member.getGuild().getId()).data("board_name", boardName).execute();
->>>>>>> Stashed changes
             final int statusCode = res.statusCode();
             if (statusCode == 200) {
                 MessageSender.send(embedTitle, Localizations.getString("board_created_successfully", langCode, new ArrayList<String>() {

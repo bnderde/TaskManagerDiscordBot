@@ -21,7 +21,7 @@ import de.bnder.taskmanager.utils.MessageSender;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
+import org.jsoup.Connection;
 
 import java.awt.*;
 import java.io.IOException;
@@ -33,21 +33,7 @@ public class SwitchBoard {
         final Guild guild = textChannel.getGuild();
         final String langCode = Localizations.getGuildLanguage(guild);
         final String embedTitle = Localizations.getString("board_title", langCode);
-<<<<<<< Updated upstream
-        final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/active/" + guild.getId())
-                .method(org.jsoup.Connection.Method.POST)
-                .header("authorization", "TMB " + Main.authorizationToken)
-                .header("user_id", member.getId())
-                .data("board_name", boardName)
-                .postDataCharset("UTF-8")
-                .timeout(de.bnder.taskmanager.utils.Connection.timeout)
-                .userAgent(Main.userAgent)
-                .ignoreContentType(true)
-                .ignoreHttpErrors(true)
-                .execute();
-=======
         final org.jsoup.Connection.Response res = Main.tmbAPI("board/active/" + guild.getId(), member.getId(), Connection.Method.POST, guild.getId()).data("board_name", boardName).execute();
->>>>>>> Stashed changes
         final int statusCode = res.statusCode();
         if (statusCode == 200) {
             MessageSender.send(embedTitle, Localizations.getString("board_activated_successfully", langCode, new ArrayList<>() {

@@ -15,24 +15,46 @@ package de.bnder.taskmanager.listeners.roles;
  * limitations under the License.
  */
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import de.bnder.taskmanager.main.Main;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+
+import java.io.IOException;
 
 public class MemberRoleAdd extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {
-        final String userID = event.getUser().getId();
-        final String guildID = event.getUser().getId();
-        for (Role role : event.getRoles()) {
-            final String roleID = role.getId();
-            sendRequest(roleID, guildID, userID);
-        }
+        updateUserRoles(event.getMember());
     }
 
-    public static void sendRequest(final String roleID, final String guildID, final String userID) {
-        //TODO
+    public static void updateUserRoles(final Member member) {
+        final JsonArray jsonArray = new JsonArray();
+        for (Role role : member.getRoles()) {
+            jsonArray.add(new JsonObject().add("role_id", role.getId()).add("has_admin_permission", role.hasPermission(Permission.ADMINISTRATOR)));
+        }
+        try {
+            Jsoup.connect(Main.tmbApiUrl + "/role-member/add/" + member.getGuild().getId())
+                    .method(Connection.Method.POST)
+                    .header("authorization", "TMB " + Main.tmbApiAuthorizationToken)
+                    .header("user_id", member.getId())
+                    .timeout(de.bnder.taskmanager.utils.Connection.timeout)
+                    .data("roles", jsonArray.toString())
+                    .userAgent(Main.userAgent)
+                    .ignoreContentType(true)
+                    .ignoreHttpErrors(true)
+                    .postDataCharset("UTF-8")
+                    .followRedirects(true)
+                    .execute();
+        } catch (IOException ignored) {
+        }
     }
 
 }

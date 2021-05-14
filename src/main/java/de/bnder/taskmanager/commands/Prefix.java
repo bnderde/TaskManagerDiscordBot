@@ -7,7 +7,6 @@ import de.bnder.taskmanager.utils.MessageSender;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.IOException;
@@ -23,11 +22,7 @@ public class Prefix implements Command {
             if (args.length == 1) {
                 final String prefix = args[0];
                 if (prefix.length() == 1) {
-<<<<<<< Updated upstream
-                    final Connection.Response res = Jsoup.connect(Main.requestURL + "/server/prefix/" + event.getGuild().getId()).method(org.jsoup.Connection.Method.POST).header("authorization", "TMB " + Main.authorizationToken).data("prefix", prefix).postDataCharset("UTF-8").header("user_id", event.getMember().getId()).timeout(de.bnder.taskmanager.utils.Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
                     final Connection.Response res = Main.tmbAPI("server/prefix/" + event.getGuild().getId(), event.getAuthor().getId(), Connection.Method.POST, event.getGuild().getId()).data("prefix", prefix).execute();
->>>>>>> Stashed changes
                     if (res.statusCode() == 200) {
                         MessageSender.send(embedTitle, Localizations.getString("prefix_changed", langCode, new ArrayList<String>(){{
                             add(prefix);

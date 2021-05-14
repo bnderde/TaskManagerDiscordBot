@@ -23,10 +23,7 @@ import de.bnder.taskmanager.commands.permission.PermissionController;
 import de.bnder.taskmanager.commands.settings.SettingsController;
 import de.bnder.taskmanager.commands.task.TaskController;
 import de.bnder.taskmanager.listeners.*;
-import de.bnder.taskmanager.listeners.roles.MemberRoleAdd;
-import de.bnder.taskmanager.listeners.roles.RoleCreate;
-import de.bnder.taskmanager.listeners.roles.RoleDelete;
-import de.bnder.taskmanager.listeners.roles.RoleUpdatePermissions;
+import de.bnder.taskmanager.listeners.roles.*;
 import de.bnder.taskmanager.listeners.typoReactionListeners.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -37,24 +34,19 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 
 import javax.security.auth.login.LoginException;
 import java.util.Arrays;
 
 public class Main {
 
-    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    public static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
-<<<<<<< Updated upstream
-    public static final String requestURL = dotenv.get("REQUEST_URL") != null ? dotenv.get("REQUEST_URL") : System.getenv("REQUEST_URL");
-    public static final String authorizationToken = dotenv.get("AUTHORIZATION_TOKEN") != null ? dotenv.get("AUTHORIZATION_TOKEN") : System.getenv("AUTHORIZATION_TOKEN");
+    public static final String tmbApiUrl = dotenv.get("REQUEST_URL") != null ? dotenv.get("REQUEST_URL") : System.getenv("REQUEST_URL");
+    public static final String tmbApiAuthorizationToken = dotenv.get("AUTHORIZATION_TOKEN") != null ? dotenv.get("AUTHORIZATION_TOKEN") : System.getenv("AUTHORIZATION_TOKEN");
     public static final String userAgent = "TaskmanagerBot/1.0 (Windows; U; WindowsNT 5.1; de-DE; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6";
-    public static final int shard = Integer.parseInt(dotenv.get("SHARD") != null ? dotenv.get("SHARD") : System.getenv("SHARD"));
-    public static final int totalShard = Integer.parseInt(dotenv.get("TOTAL_SHARDS") != null ? dotenv.get("TOTAL_SHARDS") : System.getenv(("TOTAL_SHARDS")));
-=======
-    private static final String tmbApiUrl = dotenv.get("REQUEST_URL") != null ? dotenv.get("REQUEST_URL") : System.getenv("REQUEST_URL");
-    private static final String tmbApiAuthorizationToken = dotenv.get("AUTHORIZATION_TOKEN") != null ? dotenv.get("AUTHORIZATION_TOKEN") : System.getenv("AUTHORIZATION_TOKEN");
-    private static final String userAgent = "TaskmanagerBot/1.0 (Windows; U; WindowsNT 5.1; de-DE; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6";
     private static final int totalShards = Integer.parseInt(dotenv.get("TOTAL_SHARDS") != null ? dotenv.get("TOTAL_SHARDS") : System.getenv(("TOTAL_SHARDS")));
     public static final int shard = Integer.parseInt(dotenv.get("SHARD") != null ? dotenv.get("SHARD") : System.getenv("SHARD"));
 
@@ -65,7 +57,7 @@ public class Main {
             final Guild guild = jda.getGuildById(guildId);
             if (guild != null) {
                 final Member member = guild.retrieveMemberById(userID).complete();
-                //TODO: Send request to update user data
+                MemberRoleAdd.updateUserRoles(member);
             }
         }
 
@@ -79,7 +71,6 @@ public class Main {
                 .postDataCharset("UTF-8")
                 .followRedirects(true);
     }
->>>>>>> Stashed changes
 
     public static final String prefix = "-";
 
@@ -88,9 +79,9 @@ public class Main {
                 Arrays.asList(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS));
 
         /** Disable Caches for better memory usage */
-        builder.disableCache(Arrays.asList(CacheFlag.VOICE_STATE, CacheFlag.EMOTE, CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES));
+        builder.disableCache(Arrays.asList(CacheFlag.VOICE_STATE, CacheFlag.EMOTE, CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ROLE_TAGS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ONLINE_STATUS));
 
-        builder.setShardsTotal(totalShard);
+        builder.setShardsTotal(totalShards);
         builder.setShards(shard);
 
         builder.setAutoReconnect(true);
@@ -111,6 +102,7 @@ public class Main {
         builder.addEventListeners(new RoleDelete());
         builder.addEventListeners(new MemberRoleAdd());
         builder.addEventListeners(new RoleUpdatePermissions());
+        builder.addEventListeners(new MemberRoleRemove());
 
         CommandHandler.commands.put("version", new Version());
         CommandHandler.commands.put("prefix", new Prefix());

@@ -1,6 +1,6 @@
-package de.bnder.taskmanager.utils;
+package de.bnder.taskmanager.listeners.roles;
 /*
- * Copyright (C) 2019 Jan Brinkmann
+ * Copyright (C) 2021 Jan Brinkmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,15 @@ package de.bnder.taskmanager.utils;
  * limitations under the License.
  */
 
-import de.bnder.taskmanager.main.Main;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.io.IOException;
+public class MemberRoleRemove extends ListenerAdapter {
 
-public class UpdateServerName {
-
-    public static void update(Guild guild) throws IOException {
-        String name = guild.getName();
-        Main.tmbAPI("server/name/" + guild.getId(), null, org.jsoup.Connection.Method.POST, null).data("name", name).data("owner_id", guild.retrieveOwner().complete().getId()).execute();
+    @Override
+    public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
+        MemberRoleAdd.updateUserRoles(event.getMember());
     }
+
 
 }

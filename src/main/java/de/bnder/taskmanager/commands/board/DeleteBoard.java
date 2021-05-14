@@ -16,14 +16,12 @@ package de.bnder.taskmanager.commands.board;
  */
 
 import de.bnder.taskmanager.main.Main;
-import de.bnder.taskmanager.utils.Connection;
 import de.bnder.taskmanager.utils.Localizations;
 import de.bnder.taskmanager.utils.MessageSender;
 import de.bnder.taskmanager.utils.PermissionSystem;
 import de.bnder.taskmanager.utils.permissions.BoardPermission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.IOException;
@@ -35,19 +33,7 @@ public class DeleteBoard {
         final String langCode = Localizations.getGuildLanguage(member.getGuild());
         final String embedTitle = Localizations.getString("board_title", langCode);
         if (PermissionSystem.hasPermission(member, BoardPermission.DELETE_BOARD)) {
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/" + member.getGuild().getId() + "/" + boardName)
-                    .method(org.jsoup.Connection.Method.DELETE)
-                    .header("authorization", "TMB " + Main.authorizationToken)
-                    .header("user_id", member.getId())
-                    .timeout(Connection.timeout)
-                    .userAgent(Main.userAgent)
-                    .ignoreContentType(true)
-                    .ignoreHttpErrors(true)
-                    .execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("board/" + member.getGuild().getId() + "/" + boardName, member.getId(), org.jsoup.Connection.Method.DELETE, member.getGuild().getId()).execute();
->>>>>>> Stashed changes
             final int statusCode = res.statusCode();
             if (statusCode == 200) {
                 MessageSender.send(embedTitle, Localizations.getString("board_was_deleted", langCode, new ArrayList<String>() {

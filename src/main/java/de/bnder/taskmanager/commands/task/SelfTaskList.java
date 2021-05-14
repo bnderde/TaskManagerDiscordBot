@@ -4,13 +4,11 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import de.bnder.taskmanager.main.Main;
-import de.bnder.taskmanager.utils.Connection;
 import de.bnder.taskmanager.utils.Localizations;
 import de.bnder.taskmanager.utils.MessageSender;
 import de.bnder.taskmanager.utils.Settings;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.awt.*;
@@ -22,11 +20,7 @@ public class SelfTaskList {
     public static void selfTaskList(Member member, TextChannel textChannel) throws IOException {
         final String langCode = Localizations.getGuildLanguage(member.getGuild());
         final String embedTitle = Localizations.getString("task_message_title", langCode);
-<<<<<<< Updated upstream
-        final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/task/user/tasks/" + textChannel.getGuild().getId() + "/" + member.getId()).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", member.getId()).timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
         final org.jsoup.Connection.Response res = Main.tmbAPI("task/user/tasks/" + textChannel.getGuild().getId() + "/" + member.getId(), member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
->>>>>>> Stashed changes
         final Document document = res.parse();
         final String jsonResponse = document.body().text();
         final JsonObject jsonObject = Json.parse(jsonResponse).asObject();

@@ -4,7 +4,6 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import de.bnder.taskmanager.main.Main;
 import net.dv8tion.jda.api.entities.Guild;
-import org.jsoup.Jsoup;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -59,11 +58,7 @@ public class Localizations {
 
     public static String getGuildLanguage(Guild guild) {
         try {
-<<<<<<< Updated upstream
-            final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/server/language/" + guild.getId()).method(org.jsoup.Connection.Method.GET).header("authorization", "TMB " + Main.authorizationToken).header("user_id", "---").timeout(Connection.timeout).userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
             final org.jsoup.Connection.Response res = Main.tmbAPI("server/language/" + guild.getId(), null, org.jsoup.Connection.Method.GET, null).execute();
->>>>>>> Stashed changes
             if (res.statusCode() == 200) {
                 return Json.parse(res.parse().body().text()).asObject().getString("language", "en");
             }

@@ -19,12 +19,10 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import de.bnder.taskmanager.main.Main;
-import de.bnder.taskmanager.utils.Connection;
 import de.bnder.taskmanager.utils.Localizations;
 import de.bnder.taskmanager.utils.MessageSender;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.IOException;
@@ -35,19 +33,7 @@ public class BoardList {
     public static void getBoardList(Member member, TextChannel textChannel, String prefix) throws IOException {
         final String langCode = Localizations.getGuildLanguage(member.getGuild());
         final String embedTitle = Localizations.getString("board_title", langCode);
-<<<<<<< Updated upstream
-        final org.jsoup.Connection.Response res = Jsoup.connect(Main.requestURL + "/board/list/" + member.getGuild().getId())
-                .method(org.jsoup.Connection.Method.GET)
-                .header("authorization", "TMB " + Main.authorizationToken)
-                .header("user_id", member.getId())
-                .timeout(Connection.timeout)
-                .userAgent(Main.userAgent)
-                .ignoreContentType(true)
-                .ignoreHttpErrors(true)
-                .execute();
-=======
         final org.jsoup.Connection.Response res = Main.tmbAPI("board/list/" + member.getGuild().getId(), member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
->>>>>>> Stashed changes
         final JsonObject jsonObject = Json.parse(res.parse().body().text()).asObject();
         final int statusCode = res.statusCode();
         if (statusCode == 200) {

@@ -4,7 +4,6 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import de.bnder.taskmanager.main.Main;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
@@ -33,31 +32,12 @@ public class UpdateLists {
     }
 
     private static int updateOwnStats(final int servers) throws IOException {
-<<<<<<< Updated upstream:src/main/java/de/bnder/taskmanager/lists/UpdateLists.java
-        final Connection.Response response = Jsoup.connect(Main.requestURL + "/stats/shard/" + Main.shard + "/servers")
-                .method(Connection.Method.POST)
-                .header("authorization", "TMB " + Main.authorizationToken)
-                .header("user_id", "---")
-                .data("servers", String.valueOf(servers))
-                .timeout(de.bnder.taskmanager.utils.Connection.timeout)
-                .userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
         final Connection.Response response = Main.tmbAPI("stats/shard/" + Main.shard + "/servers", null, Connection.Method.POST, null).data("servers", String.valueOf(servers)).execute();
->>>>>>> Stashed changes:src/main/java/de/bnder/taskmanager/botlists/UpdateLists.java
         return response.statusCode();
     }
 
     public static int getTotalServers() throws IOException {
-<<<<<<< Updated upstream:src/main/java/de/bnder/taskmanager/lists/UpdateLists.java
-        final Connection.Response response = Jsoup.connect(Main.requestURL + "/stats")
-                .method(Connection.Method.GET)
-                .header("authorization", "TMB " + Main.authorizationToken)
-                .header("user_id", "---")
-                .timeout(de.bnder.taskmanager.utils.Connection.timeout)
-                .userAgent(Main.userAgent).ignoreContentType(true).ignoreHttpErrors(true).execute();
-=======
         final Connection.Response response = Main.tmbAPI("stats", null, Connection.Method.GET, null).execute();
->>>>>>> Stashed changes:src/main/java/de/bnder/taskmanager/botlists/UpdateLists.java
         if (response.statusCode() == 200) {
             final JsonObject jsonObject = Json.parse(response.body()).asObject();
             final int shard0Servers = jsonObject.getInt("servers_shard_0", 0);
