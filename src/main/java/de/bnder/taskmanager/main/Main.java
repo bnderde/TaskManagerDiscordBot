@@ -50,7 +50,7 @@ public class Main {
     private static final int totalShards = Integer.parseInt(dotenv.get("TOTAL_SHARDS") != null ? dotenv.get("TOTAL_SHARDS") : System.getenv(("TOTAL_SHARDS")));
     public static final int shard = Integer.parseInt(dotenv.get("SHARD") != null ? dotenv.get("SHARD") : System.getenv("SHARD"));
 
-    static ShardManager jda;
+    public static ShardManager jda;
 
     public static Connection tmbAPI(String path, String userID, Connection.Method method, String guildId) {
         if (guildId != null && userID != null) {

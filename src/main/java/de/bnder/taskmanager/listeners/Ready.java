@@ -2,6 +2,7 @@ package de.bnder.taskmanager.listeners;
 
 import de.bnder.taskmanager.botlists.UpdateLists;
 import de.bnder.taskmanager.listeners.roles.RoleUpdatePermissions;
+import de.bnder.taskmanager.server.Server;
 import de.bnder.taskmanager.utils.DeadlineReminders;
 import de.bnder.taskmanager.utils.UpdateServerName;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -29,6 +30,8 @@ public class Ready extends ListenerAdapter {
         DeadlineReminders.start(e.getJDA().getShardManager());
         UpdateLists.updateBotLists(e.getJDA().getGuilds().size(), e.getJDA().getSelfUser().getId());
         e.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
+
+        Server.startServer();
     }
 
 }
