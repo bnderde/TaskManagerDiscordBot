@@ -18,10 +18,12 @@ package de.bnder.taskmanager.server.routes;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import de.bnder.taskmanager.main.Main;
+import de.bnder.taskmanager.server.ServerResponse;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -31,21 +33,31 @@ public class CheckServerMember implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) {
-        System.out.println("Method" + exchange.getRequestMethod());
-        if (exchange.getRequestMethod().equals("MethodPOST")) {
-            final String requestBody = inputStreamToString(exchange.getRequestBody());
-            final JsonObject jsonObject = Json.parse(requestBody).asObject();
-            final JsonArray serverMembers = jsonObject.get("server_members").asArray();
-            for (JsonValue serverMember : serverMembers) {
-                final String userID = serverMember.asObject().getString("user_id", null);
-                final String serverID = serverMember.asObject().getString("server_id", null);
-                if (userID != null && serverID != null) {
-                    if (Main.jda.getGuildById(serverID).retrieveMemberById(userID).complete() != null) {
-                        //TODO:
-                        final JsonObject jsonResponse = new JsonObject();
+        if (exchange.getRequestMethod().equals("POST")) {
+            //TODO: change key
+            if (exchange.getRequestHeaders().get("authorization").get(0).equals("abcd")) {
+                final String requestBody = inputStreamToString(exchange.getRequestBody());
+                final JsonObject jsonObject = Json.parse(requestBody).asObject();
+                if (jsonObject.get("user_id") != null) {
+                    final String userID = jsonObject.get("user_id").asString();
+                    if (Main.jda.retrieveUserById(userID).complete() != null) {
+                        final User user = Main.jda.retrieveUserById(userID).complete();
+                        final JsonArray jsonArray = new JsonArray();
+                        for (Guild g : user.getMutualGuilds()) {
+                            jsonArray.add(g.getId());
+                        }
+                        ServerResponse.sendResponse(jsonArray.toString(), 200, exchange);
+                    } else {
+                        ServerResponse.sendResponse("[]", 401, exchange);
                     }
+                } else {
+                    ServerResponse.sendResponse("Post value user_id not set!", 401, exchange);
                 }
+            } else {
+                ServerResponse.sendResponse("Invalid authorization header!", 401, exchange);
             }
+        } else {
+            ServerResponse.sendResponse("Invalid Method!", 401, exchange);
         }
     }
 
