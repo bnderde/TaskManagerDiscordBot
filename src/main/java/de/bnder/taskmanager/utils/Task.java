@@ -99,14 +99,14 @@ public class Task {
         this.type = TaskType.USER;
         this.holder = member.getId();
         try {
-            final Document a = Main.tmbAPI("task/user/" + guild.getId(), null, Method.POST, null).data("task_text", text).data("deadline", deadline != null ? deadline : "").post();
+            final Document a = Main.tmbAPI("task/user/" + guild.getId(), member.getId(), Method.POST, null).data("task_text", text).data("deadline", deadline != null ? deadline : "").post();
             final String jsonResponse = a.body().text();
             final JsonObject jsonObject = Json.parse(jsonResponse).asObject();
             setStatusCode(200);
             setResponseMessage(a.body().text());
             this.id = jsonObject.getString("id", null);
             this.activeBoardName = jsonObject.getString("board", null);
-            this.newLanguageSuggestion = jsonObject.get("new_language_suggestion").isNull() ? null : jsonObject.getString("new_language_suggestion", null);
+            this.newLanguageSuggestion = jsonObject.get("new_language_suggestion") != null ? null : jsonObject.getString("new_language_suggestion", null);
 
 
             try {

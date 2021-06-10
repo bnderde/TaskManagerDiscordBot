@@ -26,7 +26,7 @@ public class ListTasksFromOthers {
         String text;
         if (mentionedMembers != null && mentionedMembers.size() > 0) {
             final Member mentionedMember = mentionedMembers.get(0);
-            final org.jsoup.Connection.Response res = Main.tmbAPI("task/user/tasks/" + member.getGuild().getId() + "/" + mentionedMember.getId(), member.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
+            final org.jsoup.Connection.Response res = Main.tmbAPI("task/user/tasks/" + member.getGuild().getId() + "/" + mentionedMember.getId(), mentionedMember.getId(), org.jsoup.Connection.Method.GET, member.getGuild().getId()).execute();
             statusCode = res.statusCode();
             jsonResponse = res.parse().body().text();
         } else {
