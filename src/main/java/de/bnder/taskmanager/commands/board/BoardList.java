@@ -55,10 +55,6 @@ public class BoardList {
                     add(prefix);
                 }}), textChannel, Color.red, langCode);
             }
-        } else if (statusCode == 404) {
-            MessageSender.send(embedTitle, Localizations.getString("no_boards_on_server", langCode, new ArrayList<>(){{
-                add(prefix);
-            }}), textChannel, Color.red, langCode);
         } else {
             MessageSender.send(embedTitle, Localizations.getString("abfrage_unbekannter_fehler", langCode, new ArrayList<String>() {
                 {
